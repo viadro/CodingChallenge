@@ -20,6 +20,11 @@ android {
     vectorDrawables {
       useSupportLibrary = true
     }
+    buildConfigField(
+      type = "String",
+      name = "API_URL",
+      value = "\"https://pixabay.com/\""
+    )
   }
 
   buildTypes {
@@ -37,6 +42,7 @@ android {
   }
   buildFeatures {
     compose = true
+    buildConfig = true
   }
   composeOptions {
     kotlinCompilerExtensionVersion = "1.5.1"

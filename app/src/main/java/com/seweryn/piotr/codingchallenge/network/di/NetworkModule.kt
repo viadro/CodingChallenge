@@ -5,7 +5,8 @@ import com.seweryn.piotr.codingchallenge.BuildConfig
 import com.seweryn.piotr.codingchallenge.data.api.ImagesApi
 import com.seweryn.piotr.codingchallenge.network.NetworkConnectionManager
 import com.seweryn.piotr.codingchallenge.network.NetworkConnectionManagerImpl
-import com.seweryn.piotr.codingchallenge.network.interceptor.InterceptorNetworkConnection
+import com.seweryn.piotr.codingchallenge.network.interceptor.AuthenticationInterceptor
+import com.seweryn.piotr.codingchallenge.network.interceptor.NetworkConnectionInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,9 +32,11 @@ class NetworkModule {
   @Singleton
   @Provides
   fun provideOkHttpClient(
-    interceptorNetworkConnection: InterceptorNetworkConnection
+    networkConnectionInterceptor: NetworkConnectionInterceptor,
+    authenticationInterceptor: AuthenticationInterceptor,
   ): OkHttpClient = OkHttpClient.Builder()
-    .addInterceptor(interceptorNetworkConnection)
+    .addInterceptor(networkConnectionInterceptor)
+    .addInterceptor(authenticationInterceptor)
     .build()
 
   @Singleton

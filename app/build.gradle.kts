@@ -25,6 +25,11 @@ android {
       name = "API_URL",
       value = "\"https://pixabay.com/\""
     )
+    buildConfigField(
+      type = "String",
+      name = "API_KEY",
+      value = "key"
+    )
   }
 
   buildTypes {

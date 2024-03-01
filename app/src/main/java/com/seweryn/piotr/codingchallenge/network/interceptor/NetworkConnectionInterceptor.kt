@@ -6,7 +6,7 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
 
-class InterceptorNetworkConnection @Inject constructor(
+class NetworkConnectionInterceptor @Inject constructor(
   private val networkConnectionManager: NetworkConnectionManager,
 ) : Interceptor {
 

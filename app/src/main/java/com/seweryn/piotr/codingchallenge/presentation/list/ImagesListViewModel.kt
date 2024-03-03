@@ -17,22 +17,40 @@ import javax.inject.Inject
 interface ImagesList {
   interface ViewModel : ScreenViewModel<ViewModel.Data> {
     sealed class Data(
-      open val searchButtonAction: (String) -> Unit,
-      val searchButtonEnabled: Boolean = true,
+      open val searchAction: (String) -> Unit,
+      open val onQueryChanged: (String) -> Unit,
+      open val query: String,
+      val searchEnabled: Boolean = true,
     ) {
-      data object Loading : Data(
-        searchButtonEnabled = false,
-        searchButtonAction = {},
+      data class Loading(
+        override val query: String = "",
+      ) : Data(
+        query = query,
+        searchEnabled = false,
+        searchAction = {},
+        onQueryChanged = {},
       )
 
       data class Empty(
-        override val searchButtonAction: (String) -> Unit,
-      ) : Data(searchButtonAction)
+        override val query: String = "",
+        override val searchAction: (String) -> Unit,
+        override val onQueryChanged: (String) -> Unit,
+      ) : Data(
+        searchAction = searchAction,
+        onQueryChanged = onQueryChanged,
+        query = query,
+      )
 
       data class Results(
+        override val query: String = "",
         val images: List<ImageListItem>,
-        override val searchButtonAction: (String) -> Unit,
-      ) : Data(searchButtonAction)
+        override val searchAction: (String) -> Unit,
+        override val onQueryChanged: (String) -> Unit,
+      ) : Data(
+        searchAction = searchAction,
+        onQueryChanged = onQueryChanged,
+        query = query,
+      )
     }
   }
 
@@ -53,14 +71,14 @@ class ImagesListViewModel @Inject constructor(
 
   override val navAction = ChannelFlow<ImagesList.Navigation.Action>()
   override val state =
-    MutableStateFlow<ImagesList.ViewModel.Data>(ImagesList.ViewModel.Data.Loading)
+    MutableStateFlow<ImagesList.ViewModel.Data>(ImagesList.ViewModel.Data.Loading(INITIAL_QUERY))
 
   init {
     getImages(INITIAL_QUERY)
   }
 
   private fun getImages(query: String) = viewModelScope.launch {
-    state.emit(ImagesList.ViewModel.Data.Loading)
+    state.emit(ImagesList.ViewModel.Data.Loading(query))
     getImagesUseCase(
       GetImagesUseCase.Params(query = query)
     ).onSuccess { images ->
@@ -72,7 +90,7 @@ class ImagesListViewModel @Inject constructor(
     ImagesListScreenMapper.Params(
       images = this,
       onListItemClicked = ::onListItemClicked,
-      onSearchButtonClicked = ::getImages
+      onSearch = ::getImages
     )
   )
 
@@ -83,7 +101,7 @@ class ImagesListViewModel @Inject constructor(
   }
 
   private companion object {
-    const val INITIAL_QUERY = "a"
+    const val INITIAL_QUERY = "fruits"
   }
 
 }

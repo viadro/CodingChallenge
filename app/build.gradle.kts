@@ -69,6 +69,8 @@ dependencies {
   implementation("androidx.compose.ui:ui-graphics")
   implementation("androidx.compose.ui:ui-tooling-preview")
   implementation("androidx.compose.material3:material3")
+  implementation("androidx.navigation:navigation-compose:2.7.7")
+  implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
   implementation("com.squareup.retrofit2:retrofit:2.9.0")
   implementation("com.squareup.retrofit2:converter-gson:2.9.0")
   implementation("com.google.dagger:hilt-android:2.48")

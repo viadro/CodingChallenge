@@ -10,13 +10,13 @@ class ImagesListScreenMapper : Mapper<ImagesListScreenMapper.Params, ImagesList.
   data class Params(
     val images: List<Image>,
     val onListItemClicked: (Image) -> Unit,
-    val onSearchButtonClicked: (String) -> Unit
+    val onSearch: (String) -> Unit
   )
 
   override fun invoke(params: Params) =
     if (params.images.isEmpty()) {
       ImagesList.ViewModel.Data.Empty(
-        searchButtonAction = params.onSearchButtonClicked,
+        searchAction = params.onSearch,
       )
     } else {
       ImagesList.ViewModel.Data.Results(
@@ -27,7 +27,7 @@ class ImagesListScreenMapper : Mapper<ImagesListScreenMapper.Params, ImagesList.
             tags = image.tags,
           )
         },
-        searchButtonAction = params.onSearchButtonClicked,
+        searchAction = params.onSearch,
       )
     }
 }

@@ -1,19 +1,37 @@
 package com.seweryn.piotr.codingchallenge.presentation.list
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
 import com.seweryn.piotr.codingchallenge.R
 import com.seweryn.piotr.codingchallenge.presentation.list.model.ImageListItem
+import com.seweryn.piotr.codingchallenge.ui.theme.Typography
 
 @Composable
 fun ImagesListScreen(
@@ -37,27 +55,78 @@ fun ImagesListScreen(
         contentDescription = null,
       )
     }
-  }
-  when (val tempData = data) {
-    is ImagesList.ViewModel.Data.Loading -> ImagesListLoading()
-    is ImagesList.ViewModel.Data.Empty -> ImagesListEmpty()
-    is ImagesList.ViewModel.Data.Results -> ImagesListResult(tempData.images)
+    when (val tempData = data) {
+      is ImagesList.ViewModel.Data.Loading -> ImagesListLoading()
+      is ImagesList.ViewModel.Data.Empty -> ImagesListEmpty()
+      is ImagesList.ViewModel.Data.Results -> ImagesListResult(
+        modifier = Modifier.weight(1f),
+        images = tempData.images,
+      )
+    }
   }
 }
 
 @Composable
 private fun ImagesListLoading() {
-
+  Box(modifier = Modifier.fillMaxSize()) {
+    CircularProgressIndicator()
+  }
 }
 
 @Composable
 private fun ImagesListEmpty() {
-
+  Box(modifier = Modifier.fillMaxSize()) {
+    Text(
+      text = stringResource(id = R.string.no_results),
+      style = Typography.bodyLarge,
+    )
+  }
 }
 
 @Composable
 private fun ImagesListResult(
-  images: List<ImageListItem>
+  modifier: Modifier,
+  images: List<ImageListItem>,
 ) {
+  LazyColumn(
+    modifier = modifier,
+    verticalArrangement = Arrangement.spacedBy(16.dp),
+  ) {
+    items(images) { image ->
+      ImageListItem(item = image)
+    }
+  }
+}
 
+@Composable
+private fun ImageListItem(
+  item: ImageListItem
+) {
+  Column(
+    modifier = Modifier
+      .padding(16.dp)
+      .background(
+        color = Color.White,
+        shape = RoundedCornerShape(8.dp),
+      )
+  ) {
+    Text(
+      text = item.userName,
+      style = Typography.bodyLarge,
+    )
+    Spacer(modifier = Modifier.height(8.dp))
+    AsyncImage(
+      model = item.thumbnailUrl,
+      contentDescription = null,
+    )
+    Spacer(modifier = Modifier.height(8.dp))
+    LazyVerticalGrid(columns = GridCells.Adaptive(100.dp)) {
+      items(item.tags) { tag ->
+        Text(
+          text = tag,
+          style = Typography.labelSmall,
+        )
+      }
+    }
+  }
 }

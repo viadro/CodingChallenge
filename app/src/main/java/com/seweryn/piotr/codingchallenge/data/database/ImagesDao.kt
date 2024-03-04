@@ -14,4 +14,7 @@ interface ImagesDao {
   @Query("SELECT * FROM ImageEntity WHERE :query = search")
   suspend fun getImages(query: String): List<ImageEntity>
 
+  @Query("SELECT * FROM ImageEntity WHERE :id = id")
+  suspend fun getImage(id: Long): ImageEntity
+
 }

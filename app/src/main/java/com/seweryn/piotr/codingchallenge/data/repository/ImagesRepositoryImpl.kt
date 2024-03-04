@@ -42,4 +42,13 @@ class ImagesRepositoryImpl(
     } catch (e: Exception) {
       Result.failure(e)
     }
+
+  override suspend fun getSavedImage(id: Long): Result<Image> =
+    try {
+      Result.success(
+        imagesDao.getImage(id).toDomain()
+      )
+    } catch (e: Exception) {
+      Result.failure(e)
+    }
 }

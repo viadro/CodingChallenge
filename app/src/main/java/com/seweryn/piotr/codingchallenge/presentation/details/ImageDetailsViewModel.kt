@@ -1,28 +1,64 @@
 package com.seweryn.piotr.codingchallenge.presentation.details
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.seweryn.piotr.codingchallenge.domain.usecase.GetSavedImageUseCase
 import com.seweryn.piotr.codingchallenge.presentation.ScreenViewModel
+import com.seweryn.piotr.codingchallenge.presentation.details.mapper.ImageDetailsScreenMapper
+import com.seweryn.piotr.codingchallenge.presentation.navigation.Destination
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 interface ImageDetails {
   interface ViewModel : ScreenViewModel<ViewModel.Data> {
-    data class Data(
-      val imageUrl: String,
-      val userName: String,
-      val tags: List<String>,
-      val likes: String,
-      val downloads: String,
-      val comments: String,
-    )
+    sealed interface Data {
+      data object Empty : Data
+      data class Image(
+        val imageUrl: String,
+        val userName: String,
+        val tags: List<String>,
+        val likes: String,
+        val downloads: String,
+        val comments: String,
+      ) : Data
+    }
   }
 }
 
 @HiltViewModel
-class ImageDetailsViewModel :
+class ImageDetailsViewModel(
+  savedStateHandle: SavedStateHandle,
+  private val getSavedImageUseCase: GetSavedImageUseCase,
+  private val screenMapper: ImageDetailsScreenMapper,
+) :
   ViewModel(),
   ImageDetails.ViewModel {
-  override val state: StateFlow<ImageDetails.ViewModel.Data>
-    get() = TODO("Not yet implemented")
+
+  private val id: Long = checkNotNull(savedStateHandle[Destination.DETAILS_ID])
+
+  init {
+    getImage()
+  }
+
+  override val state =
+    MutableStateFlow<ImageDetails.ViewModel.Data>(ImageDetails.ViewModel.Data.Empty)
+
+  private fun getImage() = viewModelScope.launch {
+    getSavedImageUseCase(
+      GetSavedImageUseCase.Params(
+        id = id,
+      )
+    ).onSuccess { image ->
+      state.emit(
+        screenMapper(
+          ImageDetailsScreenMapper.Params(
+            image = image
+          )
+        )
+      )
+    }
+  }
 
 }

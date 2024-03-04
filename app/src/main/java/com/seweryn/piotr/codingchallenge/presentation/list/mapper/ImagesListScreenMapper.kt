@@ -4,9 +4,11 @@ import com.seweryn.piotr.codingchallenge.common.Mapper
 import com.seweryn.piotr.codingchallenge.domain.model.Image
 import com.seweryn.piotr.codingchallenge.presentation.list.ImagesList
 import com.seweryn.piotr.codingchallenge.presentation.list.model.ImageListItem
+import javax.inject.Inject
 
 
-class ImagesListScreenMapper : Mapper<ImagesListScreenMapper.Params, ImagesList.ViewModel.Data> {
+class ImagesListScreenMapper @Inject constructor() :
+  Mapper<ImagesListScreenMapper.Params, ImagesList.ViewModel.Data> {
   data class Params(
     val images: List<Image>,
     val onListItemClicked: (Image) -> Unit,

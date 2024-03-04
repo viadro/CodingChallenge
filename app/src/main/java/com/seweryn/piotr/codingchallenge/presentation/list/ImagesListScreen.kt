@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -109,8 +110,9 @@ private fun ImagesListResult(
   images: List<ImageListItem>,
 ) {
   LazyColumn(
-    modifier = modifier,
-    verticalArrangement = Arrangement.spacedBy(16.dp),
+    modifier = modifier
+      .padding(vertical = 8.dp),
+    verticalArrangement = Arrangement.spacedBy(8.dp),
   ) {
     items(images) { image ->
       ImageListItem(item = image)
@@ -126,22 +128,26 @@ private fun ImageListItem(
   Column(
     modifier = Modifier
       .fillMaxWidth()
-      .padding(16.dp)
       .background(
         color = Color.White,
         shape = RoundedCornerShape(8.dp),
       )
   ) {
-    Text(
-      text = item.userName,
-      style = Typography.bodyLarge,
-      color = Color.Black,
-    )
-    Spacer(modifier = Modifier.height(8.dp))
-    AsyncImage(
-      model = item.thumbnailUrl,
-      contentDescription = null,
-    )
+    Row(
+      modifier = Modifier.padding(4.dp),
+      verticalAlignment = Alignment.CenterVertically,
+    ) {
+      AsyncImage(
+        model = item.thumbnailUrl,
+        contentDescription = null,
+      )
+      Spacer(modifier = Modifier.width(4.dp))
+      Text(
+        text = item.userName,
+        style = Typography.bodyLarge,
+        color = Color.Black,
+      )
+    }
     Spacer(modifier = Modifier.height(8.dp))
     FlowRow {
       item.tags.forEach { tag ->

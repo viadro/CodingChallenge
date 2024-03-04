@@ -17,7 +17,7 @@ import javax.inject.Inject
 interface ImagesList {
   interface ViewModel : ScreenViewModel<ViewModel.Data> {
     sealed class Data(
-      open val searchAction: (String) -> Unit,
+      open val searchAction: () -> Unit,
       open val onQueryChanged: (String) -> Unit,
       open val query: String,
       val searchEnabled: Boolean = true,
@@ -33,7 +33,7 @@ interface ImagesList {
 
       data class Empty(
         override val query: String = "",
-        override val searchAction: (String) -> Unit,
+        override val searchAction: () -> Unit,
         override val onQueryChanged: (String) -> Unit,
       ) : Data(
         searchAction = searchAction,
@@ -44,7 +44,7 @@ interface ImagesList {
       data class Results(
         override val query: String = "",
         val images: List<ImageListItem>,
-        override val searchAction: (String) -> Unit,
+        override val searchAction: () -> Unit,
         override val onQueryChanged: (String) -> Unit,
       ) : Data(
         searchAction = searchAction,
@@ -74,10 +74,11 @@ class ImagesListViewModel @Inject constructor(
     MutableStateFlow<ImagesList.ViewModel.Data>(ImagesList.ViewModel.Data.Loading(INITIAL_QUERY))
 
   init {
-    getImages(INITIAL_QUERY)
+    getImages()
   }
 
-  private fun getImages(query: String) = viewModelScope.launch {
+  private fun getImages() = viewModelScope.launch {
+    val query = state.value.query
     state.emit(ImagesList.ViewModel.Data.Loading(query))
     getImagesUseCase(
       GetImagesUseCase.Params(query = query)
@@ -87,7 +88,7 @@ class ImagesListViewModel @Inject constructor(
       state.emit(
         ImagesList.ViewModel.Data.Empty(
           query = state.value.query,
-          searchAction = state.value.searchAction,
+          searchAction = ::getImages,
           onQueryChanged = state.value.onQueryChanged,
         )
       )

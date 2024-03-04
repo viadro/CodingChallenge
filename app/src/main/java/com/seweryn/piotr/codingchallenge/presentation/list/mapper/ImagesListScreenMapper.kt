@@ -12,7 +12,7 @@ class ImagesListScreenMapper @Inject constructor() :
   data class Params(
     val images: List<Image>,
     val onListItemClicked: (Image) -> Unit,
-    val onSearch: (String) -> Unit,
+    val onSearch: () -> Unit,
     val onQueryChanged: (String) -> Unit,
   )
 

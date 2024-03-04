@@ -15,3 +15,5 @@ fun ImagesListResponse.toDomain() = hits.map { image ->
     tags = image.tags.split(", ")
   )
 }
+
+fun String.toRequest() = replace(" ", "+")

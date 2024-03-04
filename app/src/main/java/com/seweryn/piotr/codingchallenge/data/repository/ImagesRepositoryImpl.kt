@@ -5,6 +5,7 @@ import com.seweryn.piotr.codingchallenge.data.database.ImagesDao
 import com.seweryn.piotr.codingchallenge.data.database.mapper.toDomain
 import com.seweryn.piotr.codingchallenge.data.database.mapper.toEntity
 import com.seweryn.piotr.codingchallenge.data.toDomain
+import com.seweryn.piotr.codingchallenge.data.toRequest
 import com.seweryn.piotr.codingchallenge.domain.model.Image
 import com.seweryn.piotr.codingchallenge.domain.repository.ImagesRepository
 
@@ -15,7 +16,7 @@ class ImagesRepositoryImpl(
   override suspend fun fetchImages(query: String): Result<List<Image>> =
     try {
       Result.success(
-        api.getImages(query).toDomain()
+        api.getImages(query.toRequest()).toDomain()
       )
     } catch (e: Exception) {
       Result.failure(e)

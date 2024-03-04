@@ -83,6 +83,14 @@ class ImagesListViewModel @Inject constructor(
       GetImagesUseCase.Params(query = query)
     ).onSuccess { images ->
       state.emit(images.map())
+    }.onFailure {
+      state.emit(
+        ImagesList.ViewModel.Data.Empty(
+          query = state.value.query,
+          searchAction = state.value.searchAction,
+          onQueryChanged = state.value.onQueryChanged,
+        )
+      )
     }
   }
 

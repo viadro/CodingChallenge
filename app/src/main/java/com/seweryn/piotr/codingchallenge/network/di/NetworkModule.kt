@@ -12,6 +12,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter.Factory
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -31,12 +32,21 @@ class NetworkModule {
 
   @Singleton
   @Provides
+  fun provideLoggingInterceptor(): HttpLoggingInterceptor =
+    HttpLoggingInterceptor().apply {
+      level = HttpLoggingInterceptor.Level.BODY
+    }
+
+  @Singleton
+  @Provides
   fun provideOkHttpClient(
+    httpLoggingInterceptor: HttpLoggingInterceptor,
     networkConnectionInterceptor: NetworkConnectionInterceptor,
     authenticationInterceptor: AuthenticationInterceptor,
   ): OkHttpClient = OkHttpClient.Builder()
     .addInterceptor(networkConnectionInterceptor)
     .addInterceptor(authenticationInterceptor)
+    .addInterceptor(httpLoggingInterceptor)
     .build()
 
   @Singleton

@@ -9,7 +9,7 @@ import javax.inject.Inject
 class AuthenticationInterceptor @Inject constructor() : Interceptor {
 
   private companion object {
-    const val API_KEY_PARAMETER_NAME = "apiKey"
+    const val API_KEY_PARAMETER_NAME = "key"
   }
 
   override fun intercept(chain: Interceptor.Chain): Response =

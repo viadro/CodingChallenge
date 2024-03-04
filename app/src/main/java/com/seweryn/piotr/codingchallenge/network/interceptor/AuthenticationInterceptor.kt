@@ -16,7 +16,7 @@ class AuthenticationInterceptor @Inject constructor() : Interceptor {
     chain.proceed(
       chain.request().run {
         newBuilder().url(
-          url().createNewUrl()
+          url.createNewUrl()
         ).build()
       }
     )

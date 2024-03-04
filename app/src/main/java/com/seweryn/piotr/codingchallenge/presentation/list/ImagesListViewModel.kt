@@ -90,13 +90,24 @@ class ImagesListViewModel @Inject constructor(
     ImagesListScreenMapper.Params(
       images = this,
       onListItemClicked = ::onListItemClicked,
-      onSearch = ::getImages
+      onSearch = ::getImages,
+      onQueryChanged = ::onQueryChanged,
     )
   )
 
   private fun onListItemClicked(item: Image) = viewModelScope.launch {
     navAction.emit(
       ImagesList.Navigation.Action.ImageDetails(item.id)
+    )
+  }
+
+  private fun onQueryChanged(query: String) = viewModelScope.launch {
+    state.emit(
+      when (val data = state.value) {
+        is ImagesList.ViewModel.Data.Loading -> data.copy(query = query)
+        is ImagesList.ViewModel.Data.Empty -> data.copy(query = query)
+        is ImagesList.ViewModel.Data.Results -> data.copy(query = query)
+      }
     )
   }
 

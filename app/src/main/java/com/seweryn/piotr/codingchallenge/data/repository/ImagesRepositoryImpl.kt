@@ -2,7 +2,8 @@ package com.seweryn.piotr.codingchallenge.data.repository
 
 import com.seweryn.piotr.codingchallenge.data.api.ImagesApi
 import com.seweryn.piotr.codingchallenge.data.database.ImagesDatabase
-import com.seweryn.piotr.codingchallenge.data.database.model.ImageQuery
+import com.seweryn.piotr.codingchallenge.data.database.mapper.toDomain
+import com.seweryn.piotr.codingchallenge.data.database.mapper.toEntity
 import com.seweryn.piotr.codingchallenge.data.toDomain
 import com.seweryn.piotr.codingchallenge.domain.model.Image
 import com.seweryn.piotr.codingchallenge.domain.repository.ImagesRepository
@@ -22,11 +23,8 @@ class ImagesRepositoryImpl(
 
   override suspend fun saveImageQuery(query: String, images: List<Image>) =
     try {
-      database.imagesDao.insertImageQuery(
-        ImageQuery(
-          search = query,
-          images = images
-        )
+      database.imagesDao.insertImages(
+        images.map { it.toEntity(query) }
       )
       Result.success(Unit)
     } catch (e: Exception) {
@@ -36,7 +34,9 @@ class ImagesRepositoryImpl(
   override suspend fun getSavedImageQuery(query: String) =
     try {
       Result.success(
-        database.imagesDao.getImageQuery(query).images
+        database.imagesDao.getImages(query).map {
+          it.toDomain()
+        }
       )
     } catch (e: Exception) {
       Result.failure(e)

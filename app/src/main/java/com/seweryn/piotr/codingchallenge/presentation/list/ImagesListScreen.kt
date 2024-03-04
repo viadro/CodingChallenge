@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,9 +31,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.seweryn.piotr.codingchallenge.R
+import com.seweryn.piotr.codingchallenge.presentation.common.ImageTags
 import com.seweryn.piotr.codingchallenge.presentation.list.model.ImageListItem
 import com.seweryn.piotr.codingchallenge.ui.theme.Background
-import com.seweryn.piotr.codingchallenge.ui.theme.Purple80
 import com.seweryn.piotr.codingchallenge.ui.theme.Typography
 
 @Composable
@@ -149,25 +148,6 @@ private fun ImageListItem(
       )
     }
     Spacer(modifier = Modifier.height(8.dp))
-    FlowRow {
-      item.tags.forEach { tag ->
-        Box(
-          modifier = Modifier
-            .padding(4.dp)
-            .background(
-              color = Purple80,
-              shape = RoundedCornerShape(24.dp)
-            ),
-        ) {
-          Text(
-            modifier = Modifier
-              .padding(4.dp),
-            text = tag,
-            style = Typography.labelSmall,
-            color = Color.White,
-          )
-        }
-      }
-    }
+    ImageTags(tags = item.tags)
   }
 }

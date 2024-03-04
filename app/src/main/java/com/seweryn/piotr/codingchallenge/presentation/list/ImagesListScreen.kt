@@ -43,6 +43,7 @@ fun ImagesListScreen(
   val data by viewModel.state.collectAsStateWithLifecycle()
   Column(
     modifier = Modifier
+      .fillMaxSize()
       .background(Background)
       .padding(16.dp),
   ) {
@@ -80,14 +81,20 @@ fun ImagesListScreen(
 
 @Composable
 private fun ImagesListLoading() {
-  Box(modifier = Modifier.fillMaxSize()) {
+  Box(
+    modifier = Modifier.fillMaxSize(),
+    contentAlignment = Alignment.Center,
+  ) {
     CircularProgressIndicator()
   }
 }
 
 @Composable
 private fun ImagesListEmpty() {
-  Box(modifier = Modifier.fillMaxSize()) {
+  Box(
+    modifier = Modifier.fillMaxSize(),
+    contentAlignment = Alignment.Center,
+  ) {
     Text(
       text = stringResource(id = R.string.no_results),
       style = Typography.bodyLarge,

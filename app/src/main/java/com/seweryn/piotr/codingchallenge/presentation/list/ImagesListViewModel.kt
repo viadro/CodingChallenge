@@ -97,6 +97,7 @@ class ImagesListViewModel @Inject constructor(
 
   private fun List<Image>.map() = screenMapper(
     ImagesListScreenMapper.Params(
+      query = state.value.query,
       images = this,
       onListItemClicked = ::onListItemClicked,
       onSearch = ::getImages,

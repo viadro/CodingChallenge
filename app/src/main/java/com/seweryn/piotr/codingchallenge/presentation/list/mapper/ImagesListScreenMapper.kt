@@ -10,6 +10,7 @@ import javax.inject.Inject
 class ImagesListScreenMapper @Inject constructor() :
   Mapper<ImagesListScreenMapper.Params, ImagesList.ViewModel.Data> {
   data class Params(
+    val query: String,
     val images: List<Image>,
     val onListItemClicked: (Image) -> Unit,
     val onSearch: () -> Unit,
@@ -19,11 +20,13 @@ class ImagesListScreenMapper @Inject constructor() :
   override fun invoke(params: Params) =
     if (params.images.isEmpty()) {
       ImagesList.ViewModel.Data.Empty(
+        query = params.query,
         searchAction = params.onSearch,
         onQueryChanged = params.onQueryChanged,
       )
     } else {
       ImagesList.ViewModel.Data.Results(
+        query = params.query,
         images = params.images.map { image ->
           ImageListItem(
             userName = image.user,

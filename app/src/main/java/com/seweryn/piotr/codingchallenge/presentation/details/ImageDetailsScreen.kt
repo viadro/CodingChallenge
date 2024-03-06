@@ -1,11 +1,11 @@
 package com.seweryn.piotr.codingchallenge.presentation.details
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -22,6 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.seweryn.piotr.codingchallenge.R
 import com.seweryn.piotr.codingchallenge.presentation.common.ImageTags
+import com.seweryn.piotr.codingchallenge.ui.theme.Background
 import com.seweryn.piotr.codingchallenge.ui.theme.Typography
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,6 +48,7 @@ fun ImageDetailsScreen(
     Column(
       modifier = Modifier
         .padding(paddingValues)
+        .background(Background)
         .fillMaxSize(),
     ) {
       when (val tempData = data) {
@@ -68,27 +71,22 @@ private fun ImageDetailsContent(
     model = data.imageUrl,
     contentDescription = null,
   )
-  Spacer(modifier = Modifier.height(8.dp))
   DetailsRow(
     label = stringResource(id = R.string.details_user),
     value = data.userName,
   )
-  Spacer(modifier = Modifier.height(8.dp))
   DetailsRow(
     label = stringResource(id = R.string.details_comments),
     value = data.comments,
   )
-  Spacer(modifier = Modifier.height(8.dp))
   DetailsRow(
     label = stringResource(id = R.string.details_likes),
     value = data.likes,
   )
-  Spacer(modifier = Modifier.height(8.dp))
   DetailsRow(
     label = stringResource(id = R.string.details_downloads),
     value = data.downloads,
   )
-  Spacer(modifier = Modifier.height(8.dp))
   ImageTags(tags = data.tags)
 }
 
@@ -97,7 +95,10 @@ private fun DetailsRow(
   label: String,
   value: String,
 ) {
-  Row {
+  Row(
+    modifier = Modifier.padding(8.dp),
+    verticalAlignment = Alignment.CenterVertically,
+  ) {
     Text(
       text = label,
       style = Typography.bodyLarge,

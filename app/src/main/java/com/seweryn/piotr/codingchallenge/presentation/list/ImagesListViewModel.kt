@@ -82,17 +82,20 @@ class ImagesListViewModel @Inject constructor(
     state.emit(ImagesList.ViewModel.Data.Loading(query))
     getImagesUseCase(
       GetImagesUseCase.Params(query = query)
-    ).onSuccess { images ->
-      state.emit(images.map())
-    }.onFailure {
-      state.emit(
-        ImagesList.ViewModel.Data.Empty(
-          query = state.value.query,
-          searchAction = ::getImages,
-          onQueryChanged = state.value.onQueryChanged,
+    ).suspendExecute(
+      onSuccess = { images ->
+        state.emit(images.map())
+      },
+      onFailure = { _, _ ->
+        state.emit(
+          ImagesList.ViewModel.Data.Empty(
+            query = state.value.query,
+            searchAction = ::getImages,
+            onQueryChanged = state.value.onQueryChanged,
+          )
         )
-      )
-    }
+      }
+    )
   }
 
   private fun List<Image>.map() = screenMapper(

@@ -51,15 +51,20 @@ class ImageDetailsViewModel @Inject constructor(
       GetSavedImageUseCase.Params(
         id = id,
       )
-    ).onSuccess { image ->
-      state.emit(
-        screenMapper(
-          ImageDetailsScreenMapper.Params(
-            image = image
+    ).suspendExecute(
+      onSuccess = { image ->
+        state.emit(
+          screenMapper(
+            ImageDetailsScreenMapper.Params(
+              image = image
+            )
           )
         )
-      )
-    }
+      },
+      onFailure = { _, _ ->
+
+      }
+    )
   }
 
 }

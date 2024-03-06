@@ -7,6 +7,8 @@ import com.seweryn.piotr.codingchallenge.domain.model.Image
 import com.seweryn.piotr.codingchallenge.domain.usecase.GetImagesUseCase
 import com.seweryn.piotr.codingchallenge.presentation.NavigationViewModel
 import com.seweryn.piotr.codingchallenge.presentation.ScreenViewModel
+import com.seweryn.piotr.codingchallenge.presentation.error.mapper.ErrorMapper
+import com.seweryn.piotr.codingchallenge.presentation.error.model.ErrorData
 import com.seweryn.piotr.codingchallenge.presentation.list.mapper.ImagesListScreenMapper
 import com.seweryn.piotr.codingchallenge.presentation.list.model.ImageListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -41,6 +43,17 @@ interface ImagesList {
         query = query,
       )
 
+      data class Error(
+        val data: ErrorData,
+        override val query: String = "",
+        override val searchAction: () -> Unit,
+        override val onQueryChanged: (String) -> Unit,
+      ) : Data(
+        searchAction = searchAction,
+        onQueryChanged = onQueryChanged,
+        query = query,
+      )
+
       data class Results(
         override val query: String = "",
         val images: List<ImageListItem>,
@@ -65,6 +78,7 @@ interface ImagesList {
 class ImagesListViewModel @Inject constructor(
   private val getImagesUseCase: GetImagesUseCase,
   private val screenMapper: ImagesListScreenMapper,
+  private val errorMapper: ErrorMapper,
 ) : ViewModel(),
   ImagesList.ViewModel,
   ImagesList.Navigation {
@@ -86,12 +100,13 @@ class ImagesListViewModel @Inject constructor(
       onSuccess = { images ->
         state.emit(images.map())
       },
-      onFailure = { _, _ ->
+      onFailure = { error, _ ->
         state.emit(
-          ImagesList.ViewModel.Data.Empty(
+          ImagesList.ViewModel.Data.Error(
             query = state.value.query,
             searchAction = ::getImages,
             onQueryChanged = state.value.onQueryChanged,
+            data = errorMapper(error)
           )
         )
       }
@@ -120,6 +135,7 @@ class ImagesListViewModel @Inject constructor(
         is ImagesList.ViewModel.Data.Loading -> data.copy(query = query)
         is ImagesList.ViewModel.Data.Empty -> data.copy(query = query)
         is ImagesList.ViewModel.Data.Results -> data.copy(query = query)
+        is ImagesList.ViewModel.Data.Error -> data.copy(query = query)
       }
     )
   }

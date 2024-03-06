@@ -2,6 +2,8 @@ package com.seweryn.piotr.codingchallenge.di
 
 import android.content.Context
 import androidx.room.Room
+import com.seweryn.piotr.codingchallenge.common.StringProvider
+import com.seweryn.piotr.codingchallenge.common.StringProviderImpl
 import com.seweryn.piotr.codingchallenge.data.api.ImagesApi
 import com.seweryn.piotr.codingchallenge.data.database.ImagesDao
 import com.seweryn.piotr.codingchallenge.data.database.ImagesDatabase
@@ -68,5 +70,13 @@ class ApplicationModule {
     imagesRepository: ImagesRepository,
   ): GetSavedImageUseCase = GetSavedImageUseCaseImpl(
     repository = imagesRepository,
+  )
+
+  @Provides
+  @Singleton
+  fun provideStringProvider(
+    context: Context,
+  ): StringProvider = StringProviderImpl(
+    context = context,
   )
 }

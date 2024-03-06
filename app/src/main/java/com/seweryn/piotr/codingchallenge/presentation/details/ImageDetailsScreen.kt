@@ -23,6 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.seweryn.piotr.codingchallenge.R
 import com.seweryn.piotr.codingchallenge.presentation.common.ImageTags
+import com.seweryn.piotr.codingchallenge.presentation.error.ErrorComponent
 import com.seweryn.piotr.codingchallenge.ui.theme.Typography
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -53,6 +54,9 @@ fun ImageDetailsScreen(
       when (val tempData = data) {
         is ImageDetails.ViewModel.Data.Image ->
           ImageDetailsContent(data = tempData)
+
+        is ImageDetails.ViewModel.Data.Error ->
+          ErrorComponent(data = tempData.data)
 
         else -> {}
       }

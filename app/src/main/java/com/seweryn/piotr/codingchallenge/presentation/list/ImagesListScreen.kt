@@ -33,6 +33,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.seweryn.piotr.codingchallenge.R
 import com.seweryn.piotr.codingchallenge.presentation.common.ImageTags
+import com.seweryn.piotr.codingchallenge.presentation.error.ErrorComponent
 import com.seweryn.piotr.codingchallenge.presentation.list.model.ImageListItem
 import com.seweryn.piotr.codingchallenge.ui.theme.Typography
 
@@ -72,6 +73,10 @@ fun ImagesListScreen(
     when (val tempData = data) {
       is ImagesList.ViewModel.Data.Loading -> ImagesListLoading()
       is ImagesList.ViewModel.Data.Empty -> ImagesListEmpty()
+      is ImagesList.ViewModel.Data.Error -> ErrorComponent(
+        data = tempData.data,
+      )
+
       is ImagesList.ViewModel.Data.Results -> ImagesListResult(
         modifier = Modifier.weight(1f),
         images = tempData.images,

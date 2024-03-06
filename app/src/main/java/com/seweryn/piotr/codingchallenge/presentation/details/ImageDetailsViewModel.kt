@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.seweryn.piotr.codingchallenge.domain.usecase.GetSavedImageUseCase
 import com.seweryn.piotr.codingchallenge.presentation.ScreenViewModel
 import com.seweryn.piotr.codingchallenge.presentation.details.mapper.ImageDetailsScreenMapper
+import com.seweryn.piotr.codingchallenge.presentation.error.mapper.ErrorMapper
+import com.seweryn.piotr.codingchallenge.presentation.error.model.ErrorData
 import com.seweryn.piotr.codingchallenge.presentation.navigation.Destination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +18,10 @@ interface ImageDetails {
   interface ViewModel : ScreenViewModel<ViewModel.Data> {
     sealed interface Data {
       data object Empty : Data
+      data class Error(
+        val data: ErrorData
+      ) : Data
+
       data class Image(
         val imageUrl: String,
         val userName: String,
@@ -33,6 +39,7 @@ class ImageDetailsViewModel @Inject constructor(
   savedStateHandle: SavedStateHandle,
   private val getSavedImageUseCase: GetSavedImageUseCase,
   private val screenMapper: ImageDetailsScreenMapper,
+  private val errorMapper: ErrorMapper,
 ) :
   ViewModel(),
   ImageDetails.ViewModel {
@@ -61,8 +68,12 @@ class ImageDetailsViewModel @Inject constructor(
           )
         )
       },
-      onFailure = { _, _ ->
-
+      onFailure = { error, _ ->
+        state.emit(
+          ImageDetails.ViewModel.Data.Error(
+            data = errorMapper(error)
+          )
+        )
       }
     )
   }

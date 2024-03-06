@@ -5,6 +5,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.seweryn.piotr.codingchallenge.presentation.details.ImageDetailsScreen
+import com.seweryn.piotr.codingchallenge.presentation.details.ImageDetailsViewModel
+import com.seweryn.piotr.codingchallenge.presentation.list.ImagesList
 import com.seweryn.piotr.codingchallenge.presentation.list.ImagesListScreen
 import com.seweryn.piotr.codingchallenge.presentation.list.ImagesListViewModel
 
@@ -17,10 +20,18 @@ fun NavContent() {
   ) {
     composable(Destination.List.route) {
       val viewModel = hiltViewModel<ImagesListViewModel>()
+      NavEvent(navEvent = viewModel.navAction) { action ->
+        when (action) {
+          is ImagesList.Navigation.Action.ImageDetails -> navController.navigate(
+            Destination.Details(id = action.id).route
+          )
+        }
+      }
       ImagesListScreen(viewModel = viewModel)
     }
-    composable(Destination.Details.route) {
-
+    composable(Destination.Details().route) {
+      val viewModel = hiltViewModel<ImageDetailsViewModel>()
+      ImageDetailsScreen(viewModel = viewModel)
     }
   }
 }

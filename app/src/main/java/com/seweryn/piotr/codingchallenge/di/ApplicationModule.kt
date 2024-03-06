@@ -9,6 +9,8 @@ import com.seweryn.piotr.codingchallenge.data.repository.ImagesRepositoryImpl
 import com.seweryn.piotr.codingchallenge.domain.repository.ImagesRepository
 import com.seweryn.piotr.codingchallenge.domain.usecase.GetImagesUseCase
 import com.seweryn.piotr.codingchallenge.domain.usecase.GetImagesUseCaseImpl
+import com.seweryn.piotr.codingchallenge.domain.usecase.GetSavedImageUseCase
+import com.seweryn.piotr.codingchallenge.domain.usecase.GetSavedImageUseCaseImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -57,6 +59,14 @@ class ApplicationModule {
   fun provideGetImagesUseCase(
     imagesRepository: ImagesRepository,
   ): GetImagesUseCase = GetImagesUseCaseImpl(
+    repository = imagesRepository,
+  )
+
+  @Provides
+  @Singleton
+  fun provideGetSavedImageUseCase(
+    imagesRepository: ImagesRepository,
+  ): GetSavedImageUseCase = GetSavedImageUseCaseImpl(
     repository = imagesRepository,
   )
 }

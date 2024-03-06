@@ -3,6 +3,7 @@ package com.seweryn.piotr.codingchallenge.presentation.details
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -43,38 +44,52 @@ fun ImageDetailsScreen(
     }
   ) { paddingValues ->
     Column(
-      modifier = Modifier.padding(paddingValues),
+      modifier = Modifier
+        .padding(paddingValues)
+        .fillMaxSize(),
     ) {
-      AsyncImage(
-        modifier = Modifier.fillMaxWidth(),
-        model = data.imageUrl,
-        contentDescription = null,
-      )
-      Spacer(modifier = Modifier.height(8.dp))
-      DetailsRow(
-        label = stringResource(id = R.string.details_user),
-        value = data.userName,
-      )
-      Spacer(modifier = Modifier.height(8.dp))
-      DetailsRow(
-        label = stringResource(id = R.string.details_comments),
-        value = data.comments,
-      )
-      Spacer(modifier = Modifier.height(8.dp))
-      DetailsRow(
-        label = stringResource(id = R.string.details_likes),
-        value = data.likes,
-      )
-      Spacer(modifier = Modifier.height(8.dp))
-      DetailsRow(
-        label = stringResource(id = R.string.details_downloads),
-        value = data.downloads,
-      )
-      Spacer(modifier = Modifier.height(8.dp))
-      ImageTags(tags = data.tags)
+      when (val tempData = data) {
+        is ImageDetails.ViewModel.Data.Image ->
+          ImageDetailsContent(data = tempData)
+
+        else -> {}
+      }
     }
 
   }
+}
+
+@Composable
+private fun ImageDetailsContent(
+  data: ImageDetails.ViewModel.Data.Image,
+) {
+  AsyncImage(
+    modifier = Modifier.fillMaxWidth(),
+    model = data.imageUrl,
+    contentDescription = null,
+  )
+  Spacer(modifier = Modifier.height(8.dp))
+  DetailsRow(
+    label = stringResource(id = R.string.details_user),
+    value = data.userName,
+  )
+  Spacer(modifier = Modifier.height(8.dp))
+  DetailsRow(
+    label = stringResource(id = R.string.details_comments),
+    value = data.comments,
+  )
+  Spacer(modifier = Modifier.height(8.dp))
+  DetailsRow(
+    label = stringResource(id = R.string.details_likes),
+    value = data.likes,
+  )
+  Spacer(modifier = Modifier.height(8.dp))
+  DetailsRow(
+    label = stringResource(id = R.string.details_downloads),
+    value = data.downloads,
+  )
+  Spacer(modifier = Modifier.height(8.dp))
+  ImageTags(tags = data.tags)
 }
 
 @Composable

@@ -131,6 +131,9 @@ private fun ImageListItem(
         color = Color.White,
         shape = RoundedCornerShape(8.dp),
       )
+      .clickable {
+        item.onClick()
+      }
   ) {
     Row(
       modifier = Modifier.padding(4.dp),

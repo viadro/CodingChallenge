@@ -10,6 +10,7 @@ import com.seweryn.piotr.codingchallenge.presentation.navigation.Destination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 interface ImageDetails {
   interface ViewModel : ScreenViewModel<ViewModel.Data> {
@@ -28,7 +29,7 @@ interface ImageDetails {
 }
 
 @HiltViewModel
-class ImageDetailsViewModel(
+class ImageDetailsViewModel @Inject constructor(
   savedStateHandle: SavedStateHandle,
   private val getSavedImageUseCase: GetSavedImageUseCase,
   private val screenMapper: ImageDetailsScreenMapper,

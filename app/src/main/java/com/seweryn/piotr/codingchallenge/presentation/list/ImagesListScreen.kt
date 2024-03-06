@@ -17,9 +17,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,7 +36,6 @@ import coil.compose.AsyncImage
 import com.seweryn.piotr.codingchallenge.R
 import com.seweryn.piotr.codingchallenge.presentation.common.ImageTags
 import com.seweryn.piotr.codingchallenge.presentation.error.ErrorComponent
-import com.seweryn.piotr.codingchallenge.presentation.error.model.ErrorData
 import com.seweryn.piotr.codingchallenge.presentation.list.model.ImageListItem
 import com.seweryn.piotr.codingchallenge.ui.theme.Typography
 
@@ -80,8 +81,7 @@ fun ImagesListScreen(
 
       is ImagesList.ViewModel.Data.Results -> ImagesListResult(
         modifier = Modifier.weight(1f),
-        images = tempData.images,
-        error = tempData.error,
+        data = tempData,
       )
     }
   }
@@ -114,10 +114,33 @@ private fun ImagesListEmpty() {
 @Composable
 private fun ImagesListResult(
   modifier: Modifier,
-  images: List<ImageListItem>,
-  error: ErrorData?,
+  data: ImagesList.ViewModel.Data.Results,
 ) {
-  error?.let {
+  data.detailsDialog?.let { image ->
+    AlertDialog(
+      text = {
+        Text(text = stringResource(id = R.string.details_dialog_message))
+      },
+      onDismissRequest = data.onDismissDialog,
+      confirmButton = {
+        TextButton(
+          onClick = {
+            data.onConfirmDialog(image)
+          }
+        ) {
+          Text(stringResource(id = R.string.yes))
+        }
+      },
+      dismissButton = {
+        TextButton(
+          onClick = data.onDismissDialog
+        ) {
+          Text(stringResource(id = R.string.no))
+        }
+      }
+    )
+  }
+  data.error?.let {
     Box(
       modifier = Modifier
         .fillMaxWidth()
@@ -141,7 +164,7 @@ private fun ImagesListResult(
       .padding(vertical = 8.dp),
     verticalArrangement = Arrangement.spacedBy(8.dp),
   ) {
-    items(images) { image ->
+    items(data.images) { image ->
       ImageListItem(item = image)
     }
   }

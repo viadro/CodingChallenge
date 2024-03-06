@@ -58,6 +58,9 @@ interface ImagesList {
         override val query: String = "",
         val images: List<ImageListItem>,
         val error: ErrorData?,
+        val onConfirmDialog: (Image) -> Unit,
+        val onDismissDialog: () -> Unit,
+        val detailsDialog: Image? = null,
         override val searchAction: () -> Unit,
         override val onQueryChanged: (String) -> Unit,
       ) : Data(
@@ -121,14 +124,33 @@ class ImagesListViewModel @Inject constructor(
       onListItemClicked = ::onListItemClicked,
       onSearch = ::getImages,
       onQueryChanged = ::onQueryChanged,
+      onConfirmDialog = ::onConfirmDialog,
+      onDismissDialog = ::onDismissDialog,
       error = error,
     )
   )
 
   private fun onListItemClicked(item: Image) = viewModelScope.launch {
+    toggleDialog(item)
+  }
+
+  private fun onConfirmDialog(item: Image) = viewModelScope.launch {
+    toggleDialog(null)
     navAction.emit(
       ImagesList.Navigation.Action.ImageDetails(item.id)
     )
+  }
+
+  private fun onDismissDialog() = viewModelScope.launch {
+    toggleDialog(null)
+  }
+
+  private suspend fun toggleDialog(item: Image?) {
+    (state.value as? ImagesList.ViewModel.Data.Results)?.let { value ->
+      state.emit(
+        value.copy(detailsDialog = item)
+      )
+    }
   }
 
   private fun onQueryChanged(query: String) = viewModelScope.launch {

@@ -11,4 +11,9 @@
 
     <string name="error_message_no_connection">No internet connection</string>
     <string name="error_message_generic">Something went wrong</string>
+
+
+    <string name="details_dialog_message">Do you want to see image details?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

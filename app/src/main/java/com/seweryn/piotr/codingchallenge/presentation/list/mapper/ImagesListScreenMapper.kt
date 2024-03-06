@@ -19,6 +19,8 @@ class ImagesListScreenMapper @Inject constructor(
     val onSearch: () -> Unit,
     val onQueryChanged: (String) -> Unit,
     val error: Throwable?,
+    val onConfirmDialog: (Image) -> Unit,
+    val onDismissDialog: () -> Unit,
   )
 
   override fun invoke(params: Params) =
@@ -43,6 +45,8 @@ class ImagesListScreenMapper @Inject constructor(
         },
         searchAction = params.onSearch,
         onQueryChanged = params.onQueryChanged,
+        onConfirmDialog = params.onConfirmDialog,
+        onDismissDialog = params.onDismissDialog,
         error = params.error?.let {
           errorMapper(it)
         }

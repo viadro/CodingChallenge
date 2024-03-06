@@ -2,9 +2,11 @@ package com.seweryn.piotr.codingchallenge.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.seweryn.piotr.codingchallenge.presentation.details.ImageDetailsScreen
 import com.seweryn.piotr.codingchallenge.presentation.details.ImageDetailsViewModel
 import com.seweryn.piotr.codingchallenge.presentation.list.ImagesList
@@ -29,7 +31,14 @@ fun NavContent() {
       }
       ImagesListScreen(viewModel = viewModel)
     }
-    composable(Destination.Details().route) {
+    composable(
+      route = Destination.Details().route,
+      arguments = listOf(
+        navArgument(Destination.DETAILS_ID) {
+          type = NavType.LongType
+        }
+      )
+    ) {
       val viewModel = hiltViewModel<ImageDetailsViewModel>()
       ImageDetailsScreen(viewModel = viewModel)
     }

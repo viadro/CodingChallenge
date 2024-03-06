@@ -19,3 +19,5 @@ val BackgroundDark = Color(0xFF302f29)
 val OnBackgroundDark = Color(0xFFFFFFFF)
 val SurfaceDark = Color(0xFF000000)
 val OnSurfaceDark = OnBackgroundDark
+
+val Error = Color.Red

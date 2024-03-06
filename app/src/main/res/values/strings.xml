@@ -7,4 +7,8 @@
     <string name="details_downloads">Downloads:</string>
     <string name="details_comments">Comments:</string>
     <string name="details_likes">Likes:</string>
+
+
+    <string name="error_message_no_connection">No internet connection</string>
+    <string name="error_message_generic">Something went wrong</string>
 </resources>

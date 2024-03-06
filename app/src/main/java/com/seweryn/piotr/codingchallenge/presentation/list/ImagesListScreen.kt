@@ -34,6 +34,7 @@ import coil.compose.AsyncImage
 import com.seweryn.piotr.codingchallenge.R
 import com.seweryn.piotr.codingchallenge.presentation.common.ImageTags
 import com.seweryn.piotr.codingchallenge.presentation.error.ErrorComponent
+import com.seweryn.piotr.codingchallenge.presentation.error.model.ErrorData
 import com.seweryn.piotr.codingchallenge.presentation.list.model.ImageListItem
 import com.seweryn.piotr.codingchallenge.ui.theme.Typography
 
@@ -80,6 +81,7 @@ fun ImagesListScreen(
       is ImagesList.ViewModel.Data.Results -> ImagesListResult(
         modifier = Modifier.weight(1f),
         images = tempData.images,
+        error = tempData.error,
       )
     }
   }
@@ -113,7 +115,27 @@ private fun ImagesListEmpty() {
 private fun ImagesListResult(
   modifier: Modifier,
   images: List<ImageListItem>,
+  error: ErrorData?,
 ) {
+  error?.let {
+    Box(
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(vertical = 8.dp)
+        .background(
+          color = MaterialTheme.colorScheme.primary,
+          shape = RoundedCornerShape(8.dp),
+        ),
+      contentAlignment = Alignment.Center,
+    ) {
+      Text(
+        modifier = Modifier.padding(vertical = 16.dp),
+        text = it.message,
+        style = Typography.bodyLarge,
+        color = MaterialTheme.colorScheme.onPrimary,
+      )
+    }
+  }
   LazyColumn(
     modifier = modifier
       .padding(vertical = 8.dp),

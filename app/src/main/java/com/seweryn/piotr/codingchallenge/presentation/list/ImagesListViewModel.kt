@@ -57,6 +57,7 @@ interface ImagesList {
       data class Results(
         override val query: String = "",
         val images: List<ImageListItem>,
+        val error: ErrorData?,
         override val searchAction: () -> Unit,
         override val onQueryChanged: (String) -> Unit,
       ) : Data(
@@ -100,9 +101,9 @@ class ImagesListViewModel @Inject constructor(
       onSuccess = { images ->
         state.emit(images.map())
       },
-      onFailure = { error, _ ->
+      onFailure = { error, value ->
         state.emit(
-          ImagesList.ViewModel.Data.Error(
+          value?.map(error) ?: ImagesList.ViewModel.Data.Error(
             query = state.value.query,
             searchAction = ::getImages,
             onQueryChanged = state.value.onQueryChanged,
@@ -113,13 +114,14 @@ class ImagesListViewModel @Inject constructor(
     )
   }
 
-  private fun List<Image>.map() = screenMapper(
+  private fun List<Image>.map(error: Throwable? = null) = screenMapper(
     ImagesListScreenMapper.Params(
       query = state.value.query,
       images = this,
       onListItemClicked = ::onListItemClicked,
       onSearch = ::getImages,
       onQueryChanged = ::onQueryChanged,
+      error = error,
     )
   )
 

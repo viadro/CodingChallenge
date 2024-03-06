@@ -2,12 +2,15 @@ package com.seweryn.piotr.codingchallenge.presentation.list.mapper
 
 import com.seweryn.piotr.codingchallenge.common.Mapper
 import com.seweryn.piotr.codingchallenge.domain.model.Image
+import com.seweryn.piotr.codingchallenge.presentation.error.mapper.ErrorMapper
 import com.seweryn.piotr.codingchallenge.presentation.list.ImagesList
 import com.seweryn.piotr.codingchallenge.presentation.list.model.ImageListItem
 import javax.inject.Inject
 
 
-class ImagesListScreenMapper @Inject constructor() :
+class ImagesListScreenMapper @Inject constructor(
+  private val errorMapper: ErrorMapper,
+) :
   Mapper<ImagesListScreenMapper.Params, ImagesList.ViewModel.Data> {
   data class Params(
     val query: String,
@@ -15,6 +18,7 @@ class ImagesListScreenMapper @Inject constructor() :
     val onListItemClicked: (Image) -> Unit,
     val onSearch: () -> Unit,
     val onQueryChanged: (String) -> Unit,
+    val error: Throwable?,
   )
 
   override fun invoke(params: Params) =
@@ -39,6 +43,9 @@ class ImagesListScreenMapper @Inject constructor() :
         },
         searchAction = params.onSearch,
         onQueryChanged = params.onQueryChanged,
+        error = params.error?.let {
+          errorMapper(it)
+        }
       )
     }
 }

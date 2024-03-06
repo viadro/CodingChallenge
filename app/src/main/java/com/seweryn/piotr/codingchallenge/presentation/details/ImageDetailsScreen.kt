@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -16,14 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.seweryn.piotr.codingchallenge.R
 import com.seweryn.piotr.codingchallenge.presentation.common.ImageTags
-import com.seweryn.piotr.codingchallenge.ui.theme.Background
 import com.seweryn.piotr.codingchallenge.ui.theme.Typography
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,7 +38,7 @@ fun ImageDetailsScreen(
           Text(
             text = stringResource(id = R.string.details_title),
             style = Typography.bodyLarge,
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onBackground,
           )
         }
       )
@@ -48,7 +47,7 @@ fun ImageDetailsScreen(
     Column(
       modifier = Modifier
         .padding(paddingValues)
-        .background(Background)
+        .background(MaterialTheme.colorScheme.background)
         .fillMaxSize(),
     ) {
       when (val tempData = data) {
@@ -102,13 +101,13 @@ private fun DetailsRow(
     Text(
       text = label,
       style = Typography.bodyLarge,
-      color = Color.Black,
+      color = MaterialTheme.colorScheme.onBackground,
     )
     Spacer(modifier = Modifier.width(4.dp))
     Text(
       text = value,
       style = Typography.labelMedium,
-      color = Color.Black,
+      color = MaterialTheme.colorScheme.onBackground,
     )
   }
 }

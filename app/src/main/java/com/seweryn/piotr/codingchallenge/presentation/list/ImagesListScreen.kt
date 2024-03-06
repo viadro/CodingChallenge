@@ -18,13 +18,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -33,7 +33,6 @@ import coil.compose.AsyncImage
 import com.seweryn.piotr.codingchallenge.R
 import com.seweryn.piotr.codingchallenge.presentation.common.ImageTags
 import com.seweryn.piotr.codingchallenge.presentation.list.model.ImageListItem
-import com.seweryn.piotr.codingchallenge.ui.theme.Background
 import com.seweryn.piotr.codingchallenge.ui.theme.Typography
 
 @Composable
@@ -44,7 +43,7 @@ fun ImagesListScreen(
   Column(
     modifier = Modifier
       .fillMaxSize()
-      .background(Background)
+      .background(MaterialTheme.colorScheme.background)
       .padding(16.dp),
   ) {
     Row(
@@ -98,7 +97,7 @@ private fun ImagesListEmpty() {
     Text(
       text = stringResource(id = R.string.no_results),
       style = Typography.bodyLarge,
-      color = Color.Black,
+      color = MaterialTheme.colorScheme.onBackground,
     )
   }
 }
@@ -128,7 +127,7 @@ private fun ImageListItem(
     modifier = Modifier
       .fillMaxWidth()
       .background(
-        color = Color.White,
+        color = MaterialTheme.colorScheme.surface,
         shape = RoundedCornerShape(8.dp),
       )
       .clickable {
@@ -147,7 +146,7 @@ private fun ImageListItem(
       Text(
         text = item.userName,
         style = Typography.bodyLarge,
-        color = Color.Black,
+        color = MaterialTheme.colorScheme.onSurface,
       )
     }
     Spacer(modifier = Modifier.height(8.dp))
